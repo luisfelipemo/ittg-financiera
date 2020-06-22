@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-8 mx-auto">
+    <div class="col-md-10 mx-auto">
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
@@ -10,6 +10,9 @@
                         <h3 class="mb-0">Clientes</h3>
                     </div>
                     <div>
+                        <a href="{{ route('clients.export.excel') }}" class="btn btn-success">
+                            {{ __('Export Clients')}}
+                        </a>
                         <a href="{{ route('clients.create') }}" class="btn btn-primary">
                             {{ __('New Client')}}
                         </a>
@@ -17,13 +20,15 @@
                 </div>
             </div>
             <div class="card-body">
+                @if($clients->count())
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">{{ __('Name') }}</th>
                             <th scope="col">{{ __('Phone') }}</th>
-                            <th scope="col" style="width: 150px">{{ __('Actions') }}</th>
+                            <th scope="col">{{ __('Address') }}</th>
+                            <th scope="col" style="width: 250px">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,16 +37,24 @@
                             <td scope="row">{{ $client->id }}</td>
                             <td>{{ $client->name }}</td>
                             <td>{{ $client->phone }}</td>
+                            <td>{{ $client->address }}</td>
                             <td>
-                                <a href="" class="btn btn-outline-secondary btn-sm">
-                                    Show
+                                <a href="{{ route('clients.show', $client->id) }}" class="btn btn-outline-secondary btn-sm">
+                                    {{ __('Show') }}
                                 </a>
-                                <button class="btn btn-outline-danger btn-sm btn-delete" data-id="{{ $client->id }}">Delete</button>
+                                <a href="{{ route('loans.create', $client->id) }}" class="btn btn-outline-info btn-sm">
+                                    {{ __('New Loan') }}
+                                </a>
+                                <button class="btn btn-outline-danger btn-sm btn-delete" data-id="{{ $client->id }}">{{ __('Delete') }}</button>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+                {!! $clients->render() !!}
+                @else
+                <b class="message-none">{{ __('No hay clientes')}}</b>
+                @endif
             </div>
         </div>
     </div>

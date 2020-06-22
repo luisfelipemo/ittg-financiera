@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Financiera</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -13,9 +13,9 @@
         <style>
             html, body {
                 background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
+                color: #fff!important;
+                font-family: 'Nunito', normal;
+                font-weight: 100;
                 height: 100vh;
                 margin: 0;
             }
@@ -49,7 +49,7 @@
             }
 
             .links > a {
-                color: #636b6f;
+                color: #fff!important;
                 padding: 0 25px;
                 font-size: 13px;
                 font-weight: 600;
@@ -61,9 +61,29 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            /* welcome add*/
+            .welcome-bg{
+            background-image:url('../images/background/bg-1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            position:relative;
+            }
+            .welcome-bg::before{
+                background-color:rgba(6, 93, 144,.8);
+                content:'';
+                width:100%;
+                height:100%;
+                position:absolute;
+            }
+            /* end welcome add*/
         </style>
     </head>
     <body>
+        <main class="welcome-bg">
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -81,7 +101,8 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Financiera
+                    <p style="text-align:center; display:inline-block; font-size:.4em; width:100%;">Un proyecto de programación web frameworks</p>
                 </div>
 
                 <div class="links">
@@ -96,5 +117,6 @@
                 </div>
             </div>
         </div>
+        </main>
     </body>
 </html>

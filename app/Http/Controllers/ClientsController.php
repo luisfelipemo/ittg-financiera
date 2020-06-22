@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ClientsImport;
+use App\Exports\ClientsExport;
+use DB;
 
 class ClientsController extends Controller
 {
@@ -14,7 +18,7 @@ class ClientsController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::orderBy('name', 'ASC')->paginate();
         return view('clients.index', [
             'clients' => $clients,
         ]);
@@ -30,6 +34,17 @@ class ClientsController extends Controller
         return view('clients.create');
     }
 
+    public function exportExcel()
+    {
+        return Excel::download(new ClientsExport, 'clients.xlsx');
+    }
+
+    public function importExcel(Request $request)
+    {
+        Excel::import(new ClientsImport, $request()->file('file'));
+        return back()->with('message', 'Proceso completado');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -43,14 +58,9 @@ class ClientsController extends Controller
             'phone' => 'required',
             'address' => 'required',
         ]);
+        Client::create($request->all());
 
-        Client::create([
-            'name'  => $request->input('name'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-        ]);
-
-        return redirect()->route('clients.index');
+        return redirect()->route('clients.index')->with('success','Proceso exitoso');
     }
 
     /**
@@ -61,7 +71,8 @@ class ClientsController extends Controller
      */
     public function show($id)
     {
-        //
+        $loans = DB::table('loans')->select('id', 'amount', 'finished')->where('client_id', '=', $id)->get();
+        return view('clients.show', ['client' => Client::findOrFail($id), 'loans' => $loans]);
     }
 
     /**
@@ -72,7 +83,7 @@ class ClientsController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('clients.edit', ['client' => Client::findOrFail($id)]);
     }
 
     /**
@@ -84,7 +95,13 @@ class ClientsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'name'  => 'required',
+            'phone' => 'required',
+            'address' => 'required',
+        ]);
+        Client::whereId($id)->update($data);
+        return redirect('/clients')->with('success', 'Client data is successfully updated');
     }
 
     /**

@@ -17,7 +17,13 @@ class CreateLoansTable extends Migration
             $table->id();
 
             $table->unsignedBigInteger('client_id');
-
+            $table->decimal('amount', 8, 2);
+            $table->integer('payments_n');
+            $table->decimal('quota', 8, 2);
+            $table->integer('total');
+            $table->date('ministering_date');
+            $table->date('due_date');
+            $table->boolean('finished');
             $table->timestamps();
 
             $table->foreign('client_id')
