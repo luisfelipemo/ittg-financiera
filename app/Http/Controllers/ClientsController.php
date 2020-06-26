@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\ClientsImport;
 use App\Exports\ClientsExport;
+use App\Imports\ClientsImport;
 use DB;
 
 class ClientsController extends Controller
@@ -41,8 +41,9 @@ class ClientsController extends Controller
 
     public function importExcel(Request $request)
     {
-        Excel::import(new ClientsImport, $request()->file('file'));
-        return back()->with('message', 'Proceso completado');
+        //$file = $request->file('file');
+        Excel::import(new ClientsImport, $request->file('file'));
+        return back()->with('message', 'Clientes importados');
     }
 
     /**
@@ -58,9 +59,15 @@ class ClientsController extends Controller
             'phone' => 'required',
             'address' => 'required',
         ]);
+
+        /*Client::create([
+            'name'  => $request->input('name'),
+            'phone' => $request->input('phone'),
+            'address' => $request->input('address'),
+        ]);*/
         Client::create($request->all());
 
-        return redirect()->route('clients.index')->with('success','Proceso exitoso');
+        return redirect()->route('clients.index')->with('success','Cliente agregado al sistema satisfactoriamente');
     }
 
     /**
