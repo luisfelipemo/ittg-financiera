@@ -43,7 +43,7 @@ class ClientsController extends Controller
     {
         //$file = $request->file('file');
         Excel::import(new ClientsImport, $request->file('file'));
-        return back()->with('message', 'Clientes importados');
+        return back()->with('message', 'Proceso exitoso :)');
     }
 
     /**
